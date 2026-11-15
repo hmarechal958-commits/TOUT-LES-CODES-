@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Devine le Nombre</title>
+    <!-- 1. LE STYLE (CSS) -->
+     <link rel="stylesheet" href="jeuf.css">
+   
+</head>
+<body>
+
+    <!-- 2. LA STRUCTURE (HTML) -->
+    <div class="carte-jeu">
+        <h1>Devine le nombre !</h1>
+        <p>Entre <strong>1 et 100</strong> :</p>
+        
+        <input type="number" id="champ" placeholder="Ex: 42">
+        <button id="valider">Valider</button>
+        
+        <p id="message"></p>
+        <p id="compteur">Essais : 0</p>
+        
+        <button id="rejouer" class="cache">Rejouer</button>
+    </div>
+
+    <!-- 3. LA LOGIQUE (JAVASCRIPT) -->
+    <script>
+        // Variables du jeu
+        let secret = Math.floor(Math.random() * 100) + 1;
+        let essais = 0;
+
+        // Éléments de la page
+        const champ = document.getElementById("champ");
+        const btnValider = document.getElementById("valider");
+        const btnRejouer = document.getElementById("rejouer");
+        const message = document.getElementById("message");
+        const compteur = document.getElementById("compteur");
+
+        // Quand on clique sur "Valider"
+        btnValider.addEventListener("click", function() {
+            let choix = Number(champ.value);
+
+            // Vérification simple
+            if (choix < 1 || choix > 100) {
+                message.textContent = "Entre un nombre entre 1 et 100 !";
+                return;
+            }
+
+            essais++;
+            compteur.textContent = "Essais : " + essais;
+
+            // Comparaison
+            if (choix === secret) {
+                message.textContent = "Bravo ! Trouvé en " + essais + " essais !";
+                message.style.color = "green";
+                btnValider.disabled = true;
+                btnRejouer.classList.remove("cache");
+            } else if (choix < secret) {
+                message.textContent = "C'est PLUS grand !";
+                message.style.color = "blue";
+            } else {
+                message.textContent = "C'est PLUS petit !";
+                message.style.color = "red";
+            }
+
+            champ.value = "";
+            champ.focus();
+        });
+
+        // Quand on clique sur "Rejouer"
+        btnRejouer.addEventListener("click", function() {
+            secret = Math.floor(Math.random() * 100) + 1;
+            essais = 0;
+            compteur.textContent = "Essais : 0";
+            message.textContent = "";
+            btnValider.disabled = false;
+            btnRejouer.classList.add("cache");
+        });
+    </script>
+
+</body>
+</html>
